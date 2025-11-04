@@ -1,4 +1,5 @@
-﻿using DTT.ExtendedDebugLogs;
+﻿#if LOG_SYSTEM_ENABLED
+using DTT.ExtendedDebugLogs;
 
 namespace Serilog
 {
@@ -22,20 +23,21 @@ namespace Serilog
         {
             logger.WithUnityTag(tag).ForContext(contex).Information("{Message}", message);
         }
-        
+
         public static void Log(this ILogger logger, string message, UnityEngine.Object contex)
         {
             logger.ForContext(contex).Information("{Message}", message);
         }
-        
+
         public static void Log(this ILogger logger, string message)
         {
             logger.Information("{Message}", message);
         }
-        
+
         public static void Log(this ILogger logger, string message, Tag tag)
         {
             logger.WithUnityTag(tag).Information("{Message}", message);
         }
     }
 }
+#endif

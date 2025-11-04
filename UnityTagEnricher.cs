@@ -1,4 +1,5 @@
-﻿using DTT.ExtendedDebugLogs;
+﻿#if LOG_SYSTEM_ENABLED
+using DTT.ExtendedDebugLogs;
 using Serilog.Core;
 using Serilog.Events;
 
@@ -17,3 +18,4 @@ namespace Serilog
             logEvent.AddPropertyIfAbsent(_property);
     }
 }
+#endif

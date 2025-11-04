@@ -1,4 +1,5 @@
-﻿using Serilog.Core;
+﻿#if LOG_SYSTEM_ENABLED
+using Serilog.Core;
 using Serilog.Events;
 
 namespace Serilog
@@ -16,3 +17,4 @@ namespace Serilog
             logEvent.AddPropertyIfAbsent(_property);
     }
 }
+#endif

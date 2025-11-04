@@ -1,4 +1,5 @@
-﻿#nullable enable
+﻿#if LOG_SYSTEM_ENABLED
+#nullable enable
 using Serilog.Configuration;
 using Serilog.Core;
 using Serilog.Events;
@@ -68,3 +69,4 @@ namespace Serilog.Sinks.Unity3D
         }
     }
 }
+#endif
