@@ -16,10 +16,6 @@
     "serilog",
     "debug",
     "log-system"
-  ],
-  "dependencies": {
-    "com.marmary.utils": "1.0.0"
-  },
-  "samples": []
+  ]
 }
 
