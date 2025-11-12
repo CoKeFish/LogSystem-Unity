@@ -1,6 +1,6 @@
 {
   "name": "com.marmary.logsystem",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "displayName": "Marmary Log System",
   "description": "Logging system for Unity using Serilog with Unity3D integration and extended debug logs support.",
   "unity": "2020.3",
