@@ -1,3 +1,4 @@
+#if LOG_SYSTEM_ENABLED
 #nullable enable
 using System;
 using System.Diagnostics;
@@ -55,3 +56,4 @@ namespace Sample.Scripts
         }
     }
 }
+#endif
