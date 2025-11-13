@@ -1,27 +1,50 @@
 ﻿#if LOG_SYSTEM_ENABLED
 #nullable enable
+
+using System;
+using System.IO;
+using DTT.ExtendedDebugLogs;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Formatting;
-using System;
-using System.IO;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
-#if EXTENDED_DEBUG_LOGS_ASSET_STORE_RELEASE
-using DTT.ExtendedDebugLogs;
-#endif
-
-namespace Serilog.Sinks.Unity3D
+namespace Marmary.LogSystem.Runtime
 {
+    /// <summary>
+    ///     Serilog sink that forwards events to Unity's logging system.
+    /// </summary>
     public sealed class Unity3DLogEventSink : ILogEventSink
     {
+        #region Fields
+
+        /// <summary>
+        ///     Formatter used to render log events before forwarding them to Unity.
+        /// </summary>
         private readonly ITextFormatter _formatter;
 
+        #endregion
+
+        #region Constructors and Injected
+
+        /// <summary>
+        ///     Initializes a new instance of <see cref="Unity3DLogEventSink" />.
+        /// </summary>
+        /// <param name="formatter">Formatter used to render log events.</param>
         public Unity3DLogEventSink(ITextFormatter formatter)
         {
             _formatter = formatter;
         }
 
+        #endregion
+
+        #region ILogEventSink Members
+
+        /// <summary>
+        ///     Emits a log event into Unity's logging pipeline.
+        /// </summary>
+        /// <param name="logEvent">Event to emit.</param>
         public void Emit(LogEvent logEvent)
         {
             using var buffer = new StringWriter();
@@ -32,25 +55,21 @@ namespace Serilog.Sinks.Unity3D
                 LogEventLevel.Verbose or LogEventLevel.Debug or LogEventLevel.Information => LogType.Log,
                 LogEventLevel.Warning => LogType.Warning,
                 LogEventLevel.Error or LogEventLevel.Fatal => LogType.Error,
-                _ => throw new ArgumentOutOfRangeException(nameof(logEvent.Level), "Unknown log level"),
+                _ => throw new ArgumentOutOfRangeException(nameof(logEvent.Level), "Unknown log level")
             };
 
             object message = buffer.ToString().Trim();
 
-            UnityEngine.Object? unityContext = null;
+            Object? unityContext = null;
             if (logEvent.Properties.TryGetValue(UnityObjectEnricher.UnityContextKey, out var contextPropertyValue) &&
                 contextPropertyValue is ScalarValue contextScalarValue)
-            {
-                unityContext = contextScalarValue.Value as UnityEngine.Object;
-            }
+                unityContext = contextScalarValue.Value as Object;
 
 #if EXTENDED_DEBUG_LOGS_ASSET_STORE_RELEASE
             Tag? unityTag = null;
             if (logEvent.Properties.TryGetValue(UnityTagEnricher.UnityTagKey, out var tagPropertyValue) &&
                 tagPropertyValue is ScalarValue tagScalarValue)
-            {
                 unityTag = tagScalarValue.Value as Tag;
-            }
 #else
             object? unityTag = null;
             if (logEvent.Properties.TryGetValue(UnityTagEnricher.UnityTagKey, out var tagPropertyValue) &&
@@ -68,13 +87,9 @@ namespace Serilog.Sinks.Unity3D
                     if (unityContext != null)
                     {
                         if (unityTag != null)
-                        {
                             DebugEx.LogError(message, unityContext, unityTag);
-                        }
                         else
-                        {
                             DebugEx.LogError(message, unityContext);
-                        }
                     }
                     else if (unityTag != null)
                     {
@@ -92,13 +107,9 @@ namespace Serilog.Sinks.Unity3D
                     if (unityContext != null)
                     {
                         if (unityTag != null)
-                        {
                             DebugEx.LogWarning(message, unityContext, unityTag);
-                        }
                         else
-                        {
                             DebugEx.LogWarning(message, unityContext);
-                        }
                     }
                     else if (unityTag != null)
                     {
@@ -116,13 +127,9 @@ namespace Serilog.Sinks.Unity3D
                     if (unityContext != null)
                     {
                         if (unityTag != null)
-                        {
                             DebugEx.Log(message, unityContext, unityTag);
-                        }
                         else
-                        {
                             DebugEx.Log(message, unityContext);
-                        }
                     }
                     else if (unityTag != null)
                     {
@@ -131,35 +138,6 @@ namespace Serilog.Sinks.Unity3D
                     else
                     {
                         DebugEx.Log(message);
-                    }
-                }
-
-                    break;
-
-
-                case LogType.Exception:
-                {
-                    if (logEvent.Exception is { } exception)
-                    {
-                        if (unityContext != null)
-                        {
-                            if (unityTag != null)
-                            {
-                                DebugEx.LogException(exception, unityContext, unityTag);
-                            }
-                            else
-                            {
-                                DebugEx.LogException(exception, unityContext);
-                            }
-                        }
-                        else if (unityTag != null)
-                        {
-                            DebugEx.LogException(exception, unityTag);
-                        }
-                        else
-                        {
-                            DebugEx.LogException(exception);
-                        }
                     }
                 }
 
@@ -271,6 +249,8 @@ namespace Serilog.Sinks.Unity3D
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        #endregion
     }
 }
 #endif

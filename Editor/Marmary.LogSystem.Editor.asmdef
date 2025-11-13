@@ -1,0 +1,16 @@
+{
+  "name": "Marmary.LogSystem.Editor",
+  "rootNamespace": "Marmary",
+  "references": [
+    "GUID:1113ed098e845e449a0491d67f008935"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

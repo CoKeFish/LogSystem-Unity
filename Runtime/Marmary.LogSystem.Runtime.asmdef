@@ -1,0 +1,16 @@
+{
+  "name": "Marmary.LogSystem.Runtime",
+  "rootNamespace": "Marmary",
+  "references": [
+    "GUID:f12dc9607000b3e43b157143c4b19670"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
